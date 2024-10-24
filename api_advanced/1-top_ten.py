@@ -22,3 +22,28 @@ def top_ten(subreddit):
             )
     else:
         print(None)
+
+def output_check(subreddit):
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    url = f'https://www.reddit.com/r/{subreddit}/hot/.json?limit=10'
+
+    try:
+        response = requests.get(url, headers=headers, allow_redirects=False)
+        response.raise_for_status()  # Raise an error for HTTP issues
+        data = response.json()
+
+        if 'data' in data and 'children' in data['data']:
+            for post in data['data']['children']:
+                print(post['data']['title'])
+        else:
+            print(None)
+
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
+            print(None)  # Subreddit not found
+        else:
+            print(None)
+
+    except ValueError:
+        print(None)  # Handle JSON decode errors
+
