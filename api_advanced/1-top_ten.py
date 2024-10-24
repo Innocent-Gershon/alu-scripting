@@ -21,13 +21,11 @@ def top_ten(subreddit):
         if 'data' in data and 'children' in data['data']:
             for post in data['data']['children']:
                 print(post['data']['title'])
-            print("OK")  # Print OK only after successfully printing titles
-        else:
-            print("None")  # Handle case where subreddit exists but has no posts
-    except requests.exceptions.HTTPError:
-        print("None")  # Print None for HTTP errors (invalid subreddit)
+        print("OK")
+    except requests.exceptions.RequestException:
+        print("None")
     except ValueError:
-        print("None")  # Print None for JSON decoding errors
+        print("None")
 
 
 if __name__ == "__main__":
