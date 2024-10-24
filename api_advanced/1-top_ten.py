@@ -5,8 +5,8 @@ import requests
 
 def top_ten(subreddit):
     """Return number of subscribers if @subreddit is valid subreddit.
-    if not return 0."""
-
+    if not return None."""
+    
     headers = {'User-Agent': 'MyAPI/0.0.1'}
     subreddit_url = "https://reddit.com/r/{}.json".format(subreddit)
     response = requests.get(subreddit_url, headers=headers)
@@ -20,5 +20,8 @@ def top_ten(subreddit):
                 .get('data')
                 .get('title')
             )
+    elif response.status_code == 404:
+        print(None)  # Non-existent subreddit
     else:
-        print(None)
+        print(None)  # Handle other errors
+
