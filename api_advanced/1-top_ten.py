@@ -18,7 +18,7 @@ def top_ten(subreddit):
         response.raise_for_status()
         data = response.json()
 
-        if 'data' in data and 'children' in data['data']:
+        if 'data' in data and 'children' in data['data'] and data['data']['children']:
             for post in data['data']['children']:
                 print(post['data']['title'])
             print("OK")
