@@ -11,7 +11,7 @@ def top_ten(subreddit):
     Returns the top ten posts for a given subreddit.
     """
     user = {'User-Agent': 'Mozilla/5.0'}
-    url = 'https://www.reddit.com/r/{}/hot/.json?limit=10'.format(subreddit)
+    url = f'https://www.reddit.com/r/{subreddit}/hot/.json?limit=10'
 
     try:
         response = requests.get(url, headers=user, allow_redirects=False)
@@ -21,11 +21,15 @@ def top_ten(subreddit):
         if 'data' in data and 'children' in data['data']:
             for post in data['data']['children']:
                 print(post['data']['title'])
-        print("OK")
-    except requests.exceptions.RequestException:
-        print("None")
+        else:
+            print(None)  # Handle case where no posts are found
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:  # Not found
+            print(None)
+        else:
+            print(None)
     except ValueError:
-        print("None")
+        print(None)
 
 
 if __name__ == "__main__":
@@ -33,3 +37,4 @@ if __name__ == "__main__":
         top_ten(argv[1])
     else:
         print("Usage: ./script.py <subreddit>")
+
