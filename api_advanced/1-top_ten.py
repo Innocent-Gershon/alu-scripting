@@ -1,37 +1,33 @@
 #!/usr/bin/python3
-"""
-This module contains the function top_ten.
-"""
+"""Script that fetch 10 hot post for a given subreddit."""
 import requests
 from sys import argv
 
 
 def top_ten(subreddit):
+    """Return the titles of the first 10 hot posts for the given subreddit.
+    If the subreddit is not valid, print None.
     """
-    Returns the top ten posts for a given subreddit.
-    """
-    user = {'User-Agent': 'Mozilla/5.0'}
-    url = 'https://www.reddit.com/r/{}/hot/.json?limit=10'.format(subreddit)
+    headers = {'User-Agent': 'MyAPI/0.0.1'}
+    subreddit_url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
+    response = requests.get(subreddit_url, headers=headers, allow_redirects=False)
 
     try:
-        response = requests.get(url, headers=user, allow_redirects=False)
         response.raise_for_status()
-        data = response.json()
-
-        if 'data' in data and 'children' in data['data'] and data['data']['children']:
-            for post in data['data']['children']:
-                print(post['data']['title'])
+        json_data = response.json()
+        posts = json_data.get('data', {}).get('children', [])
+        if posts:
+            for post in posts:
+                print(post.get('data', {}).get('title'))
             print("OK")
         else:
             print("None")
-    except requests.exceptions.RequestException:
-        print("None")
-    except ValueError:
+    except (requests.exceptions.RequestException, ValueError):
         print("None")
 
 
-if __name__ == "__main__":
-    if len(argv) > 1:
-        top_ten(argv[1])
-    else:
+if __name__ == '__main__':
+    if len(argv) < 2:
         print("Usage: ./script.py <subreddit>")
+    else:
+        top_ten(argv[1])
