@@ -1,27 +1,26 @@
 #!/usr/bin/python3
-"""Script that fetch 10 hot post for a given subreddit."""
+"""Script that fetches 10 hot posts for a given subreddit."""
 import requests
 
 
 def top_ten(subreddit):
-    """Return number of subscribers if @subreddit is valid subreddit.
-    if not return None."""
+    """Print the titles of the first 10 hot posts for a given subreddit.
+    If the subreddit is invalid, print None."""
     
     headers = {'User-Agent': 'MyAPI/0.0.1'}
-    subreddit_url = "https://reddit.com/r/{}.json".format(subreddit)
+    subreddit_url = f"https://reddit.com/r/{subreddit}/hot.json?limit=10"
     response = requests.get(subreddit_url, headers=headers)
 
     if response.status_code == 200:
         json_data = response.json()
         for i in range(10):
-            print(
-                json_data.get('data')
-                .get('children')[i]
-                .get('data')
-                .get('title')
-            )
-    elif response.status_code == 404:
-        print(None)  # Non-existent subreddit
+            print(json_data.get('data').get('children')[i].get('data').get('title'))
     else:
-        print(None)  # Handle other errors
+        print(None)  # Handle both non-existent and other errors
 
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1:
+        top_ten(sys.argv[1])
+    else:
+        print("Usage: ./script.py <subreddit>")
