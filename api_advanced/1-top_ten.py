@@ -11,10 +11,6 @@ def top_ten(subreddit):
     subreddit_url = "https://reddit.com/r/{}.json".format(subreddit)
     response = requests.get(subreddit_url, headers=headers)
 
-    def output_check(subreddit):
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    url = f'https://www.reddit.com/r/{subreddit}/hot/.json?limit=10'
-
     if response.status_code == 200:
         json_data = response.json()
         for i in range(10):
@@ -26,10 +22,3 @@ def top_ten(subreddit):
             )
     else:
         print(None)
-
-
-
-  
-
-
-
